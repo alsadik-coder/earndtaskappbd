@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Earn Task</string>
+
+    <string name="terms_text">
+I agree to the
+<a href="#">Terms of Service</a>
+<a href="#">Privacy Policy</a>
+</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="apple_sign_in">Sign in with Apple</string>
+    <string name="facebook_sign_in">Sign in with Facebook</string>
+    <!--  TODO: Remove or change this placeholder text  -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--  Screen Titles  -->
+    <string name="withdraw_funds">Withdraw Funds</string>
+    <!--  Descriptions  -->
+    <string name="transfer_subtitle">Transfer your earnings securely to your preferred account.</string>
+    <!--  Balance Card  -->
+    <string name="available_balance">Available Balance</string>
+    <string name="balance_amount">৳5,000</string>
+    <string name="balance_code">BDT</string>
+    <!--  Withdrawal Amount  -->
+    <string name="withdrawal_amount">Withdrawal Amount</string>
+    <string name="currency_symbol">৳</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="minimum_withdrawal">Minimum withdrawal: ৳500</string>
+    <!--  Withdrawal Methods  -->
+    <string name="withdrawal_method">Withdrawal Method</string>
+    <string name="bkash">bKash</string>
+    <string name="bkash_description">Mobile wallet transfer</string>
+    <string name="nagad">Nagad</string>
+    <string name="nagad_description">Mobile wallet transfer</string>
+    <string name="bank_transfer">Bank Transfer</string>
+    <string name="bank_transfer_description">Direct bank deposit</string>
+    <!--  Actions  -->
+    <string name="view_withdrawal_history">View Withdrawal History</string>
+    <string name="submit_withdrawal">Submit Withdrawal</string>
+    <!--  Content Descriptions  -->
+    <string name="back">Back</string>
+    <string name="refresh">Refresh</string>
+    <string name="card_icon">Card Icon</string>
+    <string name="method_icon">Payment Method Icon</string>
+    <string name="history">History</string>
+    <!--  Home  -->
+    <string name="profile_image">Profile image</string>
+    <string name="wallet">Wallet</string>
+    <string name="watch_ads">Watch Ads</string>
+    <string name="daily_checkin">Daily Check In</string>
+    <string name="spin_win">Spin and Win</string>
+    <string name="track">Track</string>
+    <!--  Bottom Navigation  -->
+    <string name="nav_home">Home</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_wallet">Wallet</string>
+    <string name="nav_profile">Profile</string>
+
+</resources>

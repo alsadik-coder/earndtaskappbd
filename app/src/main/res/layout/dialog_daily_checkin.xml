@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_rounded"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+    <LinearLayout  android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        >
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily Check-in"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/green_500"
+            android:layout_gravity="center_horizontal" />
+
+        <!-- Horizontal Scrollable Buttons -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDay1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/green_check"
+                    android:layout_margin="10dp"
+                    android:text="Day 1\n 50"/>
+
+                <Button
+                    android:id="@+id/btnDay2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 2\n 80"/>
+
+                <Button
+                    android:id="@+id/btnDay3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 3\n 100"/>
+
+                <Button
+                    android:id="@+id/btnDay4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 4\n 120"/>
+
+                <Button
+                    android:id="@+id/btnDay5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 5\n 150"/>
+
+                <Button
+                    android:id="@+id/btnDay6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 6\n 180"/>
+
+                <Button
+                    android:id="@+id/btnDay7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#99EF93"
+                    android:layout_margin="10dp"
+                    android:text="Day 7\n 200"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/btnCloseDialog"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Claim"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/green_500"
+            android:textColor="@color/white"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_withdrawal_method_item"
+        android:padding="16dp">
+
+        <!-- Icon -->
+        <ImageView
+            android:id="@+id/ivMethodIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/method_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Method Name -->
+        <TextView
+            android:id="@+id/tvMethodName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            tools:text="bKash"
+            app:layout_constraintStart_toEndOf="@id/ivMethodIcon"
+            app:layout_constraintEnd_toStartOf="@id/rbSelect"
+            app:layout_constraintTop_toTopOf="@id/ivMethodIcon" />
+
+        <!-- Method Description -->
+        <TextView
+            android:id="@+id/tvMethodDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary"
+            tools:text="Mobile wallet transfer"
+            app:layout_constraintStart_toEndOf="@id/ivMethodIcon"
+            app:layout_constraintEnd_toStartOf="@id/rbSelect"
+            app:layout_constraintTop_toBottomOf="@id/tvMethodName"
+            app:layout_constraintBottom_toBottomOf="@id/ivMethodIcon" />
+
+        <!-- Radio Button -->
+        <RadioButton
+            android:id="@+id/rbSelect"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:button="@drawable/selector_radio_button"
+            android:clickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.HomeFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="@color/background_color">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Header Section with Gradient -->
+            <View
+                android:id="@+id/header_background"
+                android:layout_width="0dp"
+                android:layout_height="280dp"
+                android:background="@drawable/bg_gradient_header"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Welcome Text -->
+            <TextView
+                android:id="@+id/tv_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome back"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:alpha="0.9"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="48dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- User Name -->
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello User"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_welcome"
+                app:layout_constraintStart_toStartOf="@id/tv_welcome" />
+
+            <!-- Profile Image -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_profile_placeholder"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="24dp"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                app:strokeColor="@android:color/white"
+                app:strokeWidth="2dp"
+                app:layout_constraintTop_toTopOf="@id/tv_welcome"
+                app:layout_constraintBottom_toBottomOf="@id/tv_user_name"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Balance Card -->
+            <com.google.android.material.card.MaterialCardView
+                app:cardBackgroundColor="#FFFFFF"
+                android:id="@+id/card_balance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_user_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp">
+
+                    <!-- Total Balance Label -->
+                    <TextView
+                        android:id="@+id/tv_balance_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Balance"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <!-- Balance Amount -->
+                    <TextView
+                        android:id="@+id/tv_balance_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="৳12,450"
+                        android:textColor="@color/text_primary"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_balance_label"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <!-- Wallet Icon Button -->
+                    <ImageButton
+                        android:id="@+id/btn_wallet"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:src="@drawable/ic_wallet"
+
+                        android:scaleType="centerInside"
+                        android:padding="0dp"
+
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_balance_amount"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    <!-- Add Money Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_add_money"
+                        app:backgroundTint="@color/background_blue"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Money"
+                        android:textColor="@color/blue_600"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_add"
+                        app:iconTint="@color/blue_600"
+                        app:iconGravity="start"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_balance_amount"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <!-- Withdraw Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_withdraw"
+                        android:backgroundTint="@color/background_primary"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Withdraw"
+                        android:textColor="@color/green_600"
+                        android:textAllCaps="false"
+                        app:icon="@drawable/ic_arrow_up"
+                        app:iconTint="@color/green_600"
+                        app:iconGravity="start"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintTop_toTopOf="@id/btn_add_money"
+                        app:layout_constraintBottom_toBottomOf="@id/btn_add_money"
+                        app:layout_constraintStart_toEndOf="@id/btn_add_money" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Feature Grid -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_features"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@id/card_balance"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- Wason Axla Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_wason_axla"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/blue_600"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/card_daily_chooban"
+                    app:layout_constraintWidth_percent="0.48">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_wason_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_play"
+                            app:tint="@android:color/white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Watch Ads"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Daily Chooban Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_daily_chooban"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/green_500"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/card_wason_axla"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.48">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_daily_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_shopping_bag"
+                            app:tint="@android:color/white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily Check In"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Spin & Win Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_spin_win"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/purple_500"
+                    app:layout_constraintTop_toBottomOf="@id/card_wason_axla"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/card_track"
+                    app:layout_constraintWidth_percent="0.48">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_spin_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_lucky_wheel"
+                            app:tint="@android:color/white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Spin &amp; Win"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Track Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_track"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="16dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/orange_600"
+                    app:layout_constraintTop_toBottomOf="@id/card_daily_chooban"
+                    app:layout_constraintStart_toEndOf="@id/card_spin_win"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintWidth_percent="0.48">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/iv_track_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_clipboard"
+                            app:tint="@android:color/white"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Track"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Available Tasks Section -->
+            <TextView
+                android:id="@+id/tv_available_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Available Tasks"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_features"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_view_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View All"
+                android:textColor="@color/blue_600"
+                android:textSize="14sp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintTop_toTopOf="@id/tv_available_tasks"
+                app:layout_constraintBottom_toBottomOf="@id/tv_available_tasks"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Tasks RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_tasks"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_task"
+                tools:itemCount="5"
+                app:layout_constraintTop_toBottomOf="@id/tv_available_tasks"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>
