@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/green_check"
                     android:layout_margin="10dp"
-                    android:text="Day 1\n 5000"/>
+                    android:text="Day 1\n 2000"/>
 
                 <Button
                     android:id="@+id/btnDay2"
