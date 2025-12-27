@@ -1,66 +1,79 @@
 package com.sadik.earntask.Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sadik.earntask.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MicroTaskFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MicroTaskFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MicroTaskFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MicroTaskFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MicroTaskFragment newInstance(String param1, String param2) {
-        MicroTaskFragment fragment = new MicroTaskFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         return inflater.inflate(R.layout.fragment_micro_task, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // 🔹 Views
+        ImageView btnBack = view.findViewById(R.id.btnBack);
+        ImageView btnHistory = view.findViewById(R.id.btnHistory);
+        FloatingActionButton fabAddTask = view.findViewById(R.id.fabAddTask);
+
+        RecyclerView rvMicroTasks = view.findViewById(R.id.rvMicroTasks);
+        rvMicroTasks.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        // ---------------------------
+        // 🔙 Back
+        // ---------------------------
+        btnBack.setOnClickListener(v ->
+                requireActivity()
+                        .getSupportFragmentManager()
+                        .popBackStack()
+        );
+
+        // ---------------------------
+        // 🕘 History
+        // ---------------------------
+        btnHistory.setOnClickListener(v -> {
+            Fragment fragment = new TaskHistoryFragment();
+
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // ---------------------------
+        // ➕ Add Micro Task
+        // ---------------------------
+        fabAddTask.setOnClickListener(v -> {
+            Fragment fragment = new AddMicroTaskFragment();
+
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 }

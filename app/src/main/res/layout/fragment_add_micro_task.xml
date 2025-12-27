@@ -119,29 +119,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="LabelFor"/>
 
-    <!-- Requirement -->
     <TextView
-        android:id="@+id/tvRequirementLabel"
+        android:id="@+id/tvNeededUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Proof Requirement"
+        android:text="Your work url"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/etDescription"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <Spinner
-        android:id="@+id/spRequirement"
+    <EditText
+        android:id="@+id/etUrl"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:padding="12dp"
+        android:hint="give here your url"
+        android:gravity="top"
+        android:inputType="textUri"
         android:background="@drawable/bg_input_field"
-        android:contentDescription="Select proof requirement"
-        app:layout_constraintTop_toBottomOf="@id/tvRequirementLabel"
+        android:padding="12dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_hint"
+        android:importantForAutofill="no"
+        app:layout_constraintTop_toBottomOf="@id/tvNeededUrl"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="LabelFor"/>
 
     <!-- Submit -->
     <androidx.appcompat.widget.AppCompatButton
@@ -154,7 +159,7 @@
         android:textColor="@color/white"
         android:textAllCaps="false"
         android:background="@drawable/bg_button_primary"
-        app:layout_constraintTop_toBottomOf="@id/spRequirement"
+        app:layout_constraintTop_toBottomOf="@id/etUrl"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 

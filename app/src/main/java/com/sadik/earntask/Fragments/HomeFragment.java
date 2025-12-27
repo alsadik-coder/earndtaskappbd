@@ -13,16 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.sadik.earntask.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
 
     @Nullable
     @Override
@@ -38,6 +35,21 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 🔹 Card
+        MaterialCardView microTaskCard = view.findViewById(R.id.card_micro_task);
+
+        microTaskCard.setOnClickListener(v -> {
+            Fragment fragment = new MicroTaskFragment();
+
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // 🔹 RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.rv_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -52,12 +64,10 @@ public class HomeFragment extends Fragment {
     }
 
     // -------------------------------
-    // Model class
+    // Model
     // -------------------------------
     static class HomeTask {
-        String title;
-        String description;
-        String reward;
+        String title, description, reward;
         int iconRes;
 
         HomeTask(String title, String description, String reward, int iconRes) {
@@ -97,9 +107,6 @@ public class HomeFragment extends Fragment {
             return items.size();
         }
 
-        // -------------------------------
-        // ViewHolder
-        // -------------------------------
         static class TaskViewHolder extends RecyclerView.ViewHolder {
 
             ImageView icon;

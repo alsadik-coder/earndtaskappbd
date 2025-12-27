@@ -8,76 +8,47 @@
 
     <!-- Toolbar -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbarMicroTasks"
+        android:id="@+id/toolbarMyTasks"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/white"
         android:elevation="2dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back -->
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_back"
+
             app:tint="@color/text_primary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!-- Title -->
         <TextView
-            android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Micro Tasks"
+            android:text="My Tasks"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <!-- History Icon -->
-        <ImageView
-            android:id="@+id/btnHistory"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_history"
-            android:contentDescription="History"
-            app:tint="@color/text_primary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Task List -->
+    <!-- Task History List -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMicroTasks"
+        android:id="@+id/rvMyTasks"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="16dp"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/toolbarMicroTasks"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <!-- Add Task FAB (Bottom Left) -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_add"
-        android:contentDescription="Add Task"
-        app:tint="@color/white"
-        app:backgroundTint="@color/primary"
-
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarMyTasks"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

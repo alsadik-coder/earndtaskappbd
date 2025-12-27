@@ -105,5 +105,7 @@
     <color name="colorPending">#FFA000</color>    <!-- হলুদ/কমলা -->
     <color name="colorApproved">#4CAF50</color>  <!-- সবুজ -->
     <color name="colorDeclined">#F44336</color>  <!-- লাল -->
+    <color name="red_600">#E53935</color>
+    <color name="grey_200">#EEEEEE</color>
 
 </resources>

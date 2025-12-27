@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="120dp"
     android:layout_height="match_parent"
-    android:layout_marginEnd="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    android:layout_marginEnd="8dp">
 
     <ImageView
         android:id="@+id/imgScreenshot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
-</androidx.cardview.widget.CardView>
+        android:scaleType="centerCrop"
+        android:background="@color/grey_200"/>
+
+    <ImageView
+        android:id="@+id/btnRemoveScreenshot"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_close"
+        android:contentDescription="Remove"
+        android:background="@drawable/bg_circle_red"
+        android:tint="@color/white"/>
+</FrameLayout>
