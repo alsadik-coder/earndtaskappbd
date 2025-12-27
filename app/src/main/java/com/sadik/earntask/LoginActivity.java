@@ -1,81 +1,105 @@
 package com.sadik.earntask;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.google.android.material.button.MaterialButton;
+import androidx.appcompat.widget.AppCompatButton;
 import com.google.android.material.textfield.TextInputEditText;
+import org.json.JSONObject;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
     TextInputEditText etEmail, etPassword;
-    MaterialButton btnSignIn;
+    AppCompatButton btnSignIn;
     TextView tvCreateAccount;
-
-    PrefManager prefManager;
+    PrefManager pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        // 🔹 init
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnSignIn = findViewById(R.id.btnSignIn);
         tvCreateAccount = findViewById(R.id.tvCreateAccount);
 
-        prefManager = new PrefManager(this);
+        pref = new PrefManager(this);
 
-        // 🔹 already logged in → MainActivity
-        if (prefManager.isLoggedIn()) {
+        if(pref.getToken()!=null){
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
 
-        // 🔹 Sign In button
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
+
         btnSignIn.setOnClickListener(v -> {
 
             String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String pass  = etPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Email & Password required", Toast.LENGTH_SHORT).show();
+            if(email.isEmpty() || pass.isEmpty()){
+                Toast.makeText(this,"Fill all fields",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (prefManager.checkLogin(email, password)) {
+            api.login(email,pass).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try{
+                        if(!response.isSuccessful()){
+                            showError("HTTP Error: "+response.code());
+                            return;
+                        }
 
-                prefManager.setLogin(true);
+                        String raw = response.body().string();
+                        JSONObject obj = new JSONObject(raw);
 
-                Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
+                        if(obj.getString("status").equals("success")){
+                            pref.saveToken(obj.getString("token"));
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }else{
+                            showError(obj.optString("msg","Invalid login"));
+                        }
 
-            } else {
-                Toast.makeText(this, "Invalid Email or Password", Toast.LENGTH_SHORT).show();
-            }
+                    }catch(Exception e){
+                        showError("Invalid Server Response"+response);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    showError("Network Error: "+t.getMessage());
+                }
+            });
         });
 
-        // 🔹 Create Account click
-        tvCreateAccount.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-            finish();
-        });
+        tvCreateAccount.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class))
+        );
+    }
+
+    private void showError(String msg){
+        new AlertDialog.Builder(this)
+                .setTitle("Login Failed")
+                .setMessage(msg)
+                .setPositiveButton("COPY",(d,i)->{
+                    ClipboardManager cm=(ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setPrimaryClip(ClipData.newPlainText("error",msg));
+                    Toast.makeText(this,"Copied",Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("OK",null)
+                .show();
     }
 }

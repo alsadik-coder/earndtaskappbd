@@ -50,10 +50,11 @@ public class ProfileFragment extends Fragment {
         btnLogout.setOnClickListener(v -> {
             prefManager.logout();
 
-            Intent intent = new Intent(requireContext(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            Intent i = new Intent(requireContext(), LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         });
+
         ///
 
         return view;

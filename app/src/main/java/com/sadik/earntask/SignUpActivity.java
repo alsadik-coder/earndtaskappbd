@@ -15,6 +15,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignUpActivity extends AppCompatActivity {
 
     @Override
@@ -28,14 +33,13 @@ public class SignUpActivity extends AppCompatActivity {
             return insets;
         });
 
-        MaterialButton btnCreate = findViewById(R.id.btn_create_account);
-
         TextInputEditText etName = findViewById(R.id.et_full_name);
         TextInputEditText etPhone = findViewById(R.id.et_phone);
         TextInputEditText etEmail = findViewById(R.id.et_email);
         TextInputEditText etPassword = findViewById(R.id.et_password);
 
-        PrefManager prefManager = new PrefManager(this);
+        MaterialButton btnCreate = findViewById(R.id.btn_create_account);
+        ApiInterface api = ApiClient.getClient().create(ApiInterface.class);
 
         btnCreate.setOnClickListener(v -> {
 
@@ -44,18 +48,23 @@ public class SignUpActivity extends AppCompatActivity {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
-            if (name.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "All fields required", Toast.LENGTH_SHORT).show();
+            if(name.isEmpty()||phone.isEmpty()||email.isEmpty()||password.isEmpty()){
+                Toast.makeText(this,"Fill all fields",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            prefManager.saveUser(name, phone, email, password);
-
-            Toast.makeText(this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
-
-            startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-            finish();
+            api.register(name,phone,email,password,"").enqueue(new Callback<ResponseBody>() {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> res) {
+                    Toast.makeText(SignUpActivity.this,"Account Created",Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignUpActivity.this,LoginActivity.class));
+                    finish();
+                }
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(SignUpActivity.this,"Network Error",Toast.LENGTH_SHORT).show();
+                }
+            });
         });
+
         TextView tvSignInLink = findViewById(R.id.tv_sign_in_link);
 
         tvSignInLink.setOnClickListener(v -> {
