@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Outer circle -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M50,50 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/>
+
+    <!-- Inner circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,50 m-10,0 a10,10 0 1,1 20,0 a10,10 0 1,1 -20,0"/>
+
+    <!-- Wheel slices -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M50,50 L50,2 A48,48 0 0,1 98,50 Z"/>
+
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M50,50 L98,50 A48,48 0 0,1 50,98 Z"/>
+
+    <path
+        android:fillColor="#03A9F4"
+        android:pathData="M50,50 L50,98 A48,48 0 0,1 2,50 Z"/>
+
+    <path
+        android:fillColor="#9C27B0"
+        android:pathData="M50,50 L2,50 A48,48 0 0,1 50,2 Z"/>
+
+    <!-- Center dot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,50 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0"/>
+</vector>
