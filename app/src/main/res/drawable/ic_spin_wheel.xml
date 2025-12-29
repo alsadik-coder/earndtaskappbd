@@ -1,38 +1,63 @@
+<!-- res/drawable/ic_spin_wheel.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="200dp"
     android:height="200dp"
-    android:viewportWidth="100"
-    android:viewportHeight="100">
+    android:viewportWidth="200"
+    android:viewportHeight="200">
 
     <!-- Outer circle -->
     <path
         android:fillColor="#FF5722"
-        android:pathData="M50,50 m-48,0 a48,48 0 1,1 96,0 a48,48 0 1,1 -96,0"/>
+        android:pathData="M100,100 m-90,0 a90,90 0 1,1 180,0 a90,90 0 1,1 -180,0"/>
 
-    <!-- Inner circle -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M50,50 m-10,0 a10,10 0 1,1 20,0 a10,10 0 1,1 -20,0"/>
-
-    <!-- Wheel slices -->
+    <!-- Wheel slices (8 segments) -->
+    <!-- Segment 1 -->
     <path
         android:fillColor="#FFC107"
-        android:pathData="M50,50 L50,2 A48,48 0 0,1 98,50 Z"/>
+        android:pathData="M100,100 L100,10 A90,90 0 0,1 163.64,36.36 Z"/>
 
+    <!-- Segment 2 -->
     <path
         android:fillColor="#4CAF50"
-        android:pathData="M50,50 L98,50 A48,48 0 0,1 50,98 Z"/>
+        android:pathData="M100,100 L163.64,36.36 A90,90 0 0,1 190,100 Z"/>
 
+    <!-- Segment 3 -->
     <path
         android:fillColor="#03A9F4"
-        android:pathData="M50,50 L50,98 A48,48 0 0,1 2,50 Z"/>
+        android:pathData="M100,100 L190,100 A90,90 0 0,1 163.64,163.64 Z"/>
 
+    <!-- Segment 4 -->
     <path
         android:fillColor="#9C27B0"
-        android:pathData="M50,50 L2,50 A48,48 0 0,1 50,2 Z"/>
+        android:pathData="M100,100 L163.64,163.64 A90,90 0 0,1 100,190 Z"/>
+
+    <!-- Segment 5 -->
+    <path
+        android:fillColor="#F44336"
+        android:pathData="M100,100 L100,190 A90,90 0 0,1 36.36,163.64 Z"/>
+
+    <!-- Segment 6 -->
+    <path
+        android:fillColor="#009688"
+        android:pathData="M100,100 L36.36,163.64 A90,90 0 0,1 10,100 Z"/>
+
+    <!-- Segment 7 -->
+    <path
+        android:fillColor="#FF9800"
+        android:pathData="M100,100 L10,100 A90,90 0 0,1 36.36,36.36 Z"/>
+
+    <!-- Segment 8 -->
+    <path
+        android:fillColor="#795548"
+        android:pathData="M100,100 L36.36,36.36 A90,90 0 0,1 100,10 Z"/>
+
+    <!-- Center circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M100,100 m-20,0 a20,20 0 1,1 40,0 a20,20 0 1,1 -40,0"/>
 
     <!-- Center dot -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M50,50 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0"/>
+        android:fillColor="#FF5722"
+        android:pathData="M100,100 m-8,0 a8,8 0 1,1 16,0 a8,8 0 1,1 -16,0"/>
 </vector>

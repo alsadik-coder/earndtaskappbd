@@ -37,9 +37,20 @@ public class HomeFragment extends Fragment {
 
         // 🔹 Card
         MaterialCardView microTaskCard = view.findViewById(R.id.card_micro_task);
+        MaterialCardView spin = view.findViewById(R.id.card_spin_win);
 
         microTaskCard.setOnClickListener(v -> {
             Fragment fragment = new MicroTaskFragment();
+
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        spin.setOnClickListener(v -> {
+            Fragment fragment = new SpinFragment();
 
             requireActivity()
                     .getSupportFragmentManager()
