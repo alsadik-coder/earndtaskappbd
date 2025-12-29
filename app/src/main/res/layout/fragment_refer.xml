@@ -6,6 +6,7 @@
     android:background="#F8F9FB">
 
     <LinearLayout
+        android:id="@+id/referralContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -160,6 +161,57 @@
                             android:src="@drawable/ic_link"
                             android:tint="#6366F1" />
                     </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <!-- Submit Referral Code -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cvSubmitReferralCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Have a referral code?"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#111827" />
+
+                    <EditText
+                        android:id="@+id/etSubmitReferralCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="Enter referral code"
+                        android:inputType="textCapCharacters"
+                        android:background="@drawable/bg_input_field"
+                        android:padding="12dp"
+                        android:textColor="#111827"
+                        android:textColorHint="#9CA3AF"
+                        android:maxLines="1"
+                        android:importantForAutofill="no" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSubmitReferral"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="14dp"
+                        android:text="Submit Code"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/bg_button_primary" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

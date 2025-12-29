@@ -1,66 +1,86 @@
 package com.sadik.earntask.Fragments;
-
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.sadik.earntask.Adapter.MyTaskAdapter;
+import com.sadik.earntask.Models.MyTask;
 import com.sadik.earntask.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TaskHistoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class TaskHistoryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rvMyTasks;
+    private ImageView btnBack;
+    private MyTaskAdapter adapter;
+    private List<MyTask> taskList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public TaskHistoryFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskHistoryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TaskHistoryFragment newInstance(String param1, String param2) {
-        TaskHistoryFragment fragment = new TaskHistoryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_task_history, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        rvMyTasks = view.findViewById(R.id.rvMyTasks);
+        btnBack = view.findViewById(R.id.btnBack);
+
+        btnBack.setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager().popBackStack()
+        );
+
+        setupRecycler();
+        loadDummyData(); // later replace with API / DB
+    }
+
+    private void setupRecycler() {
+        taskList = new ArrayList<>();
+        adapter = new MyTaskAdapter(requireContext(), taskList);
+
+        rvMyTasks.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rvMyTasks.setAdapter(adapter);
+    }
+
+    private void loadDummyData() {
+        taskList.add(new MyTask(
+                "Facebook Page Like",
+                "Pending",
+                10,
+                "12 Sep 2025",
+                null
+        ));
+
+        taskList.add(new MyTask(
+                "Install App",
+                "Approved",
+                15,
+                "10 Sep 2025",
+                null
+        ));
+
+        taskList.add(new MyTask(
+                "YouTube Subscribe",
+                "Rejected",
+                20,
+                "08 Sep 2025",
+                "Screenshot not clear"
+        ));
+
+        adapter.notifyDataSetChanged();
     }
 }
