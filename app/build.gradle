@@ -4,14 +4,13 @@ plugins {
 
 android {
     namespace 'com.sadik.earntask'
-    compileSdk {
-        version = release(36)
-    }
+
+    compileSdk 36  // পরিবর্তন করা হয়েছে
 
     defaultConfig {
         applicationId "com.sadik.earntask"
         minSdk 24
-        targetSdk 36
+        targetSdk 36  // পরিবর্তন করা হয়েছে
         versionCode 1
         versionName "1.0"
 
@@ -39,19 +38,13 @@ dependencies {
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
 
-    // Supabase dependencies
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.0"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.ktor:ktor-client-android:2.3.10")
+    // Fragment লাইব্রেরি যোগ করুন
+    implementation 'androidx.fragment:fragment:1.6.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
 
-    // Optional modules
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:storage-kt")
-    implementation("io.github.jan-tennert.supabase:realtime-kt")
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
-
-
 }

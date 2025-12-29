@@ -235,6 +235,7 @@
 
                 <!-- WhatsApp -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shareWhatsApp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -269,6 +270,7 @@
 
                 <!-- Messenger -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shareMessenger"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -303,6 +305,7 @@
 
                 <!-- Telegram -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shareTelegram"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -337,6 +340,7 @@
 
                 <!-- Email -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shareEmail"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -371,6 +375,7 @@
 
                 <!-- SMS -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/shareSMS"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"

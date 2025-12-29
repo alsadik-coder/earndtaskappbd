@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">Earn Task</string>
 
-    <string name="terms_text">
-I agree to the
-<a href="#">Terms of Service</a>
-<a href="#">Privacy Policy</a>
-</string>
+    <string name="terms_text"><![CDATA[<a href="#">Terms of Service</a> <a href="#">Privacy Policy</a>]]></string>
     <string name="google_sign_in">Sign in with Google</string>
     <string name="apple_sign_in">Sign in with Apple</string>
     <string name="facebook_sign_in">Sign in with Facebook</string>
@@ -17,13 +13,13 @@ I agree to the
     <string name="transfer_subtitle">Transfer your earnings securely to your preferred account.</string>
     <!--  Balance Card  -->
     <string name="available_balance">Available Balance</string>
-    <string name="balance_amount">৳5,000</string>
+    <string name="balance_amount" formatted="false">৳5,000</string>
     <string name="balance_code">BDT</string>
     <!--  Withdrawal Amount  -->
     <string name="withdrawal_amount">Withdrawal Amount</string>
-    <string name="currency_symbol">৳</string>
+    <string name="currency_symbol" formatted="false">৳</string>
     <string name="enter_amount">Enter Amount</string>
-    <string name="minimum_withdrawal">Minimum withdrawal: ৳500</string>
+    <string name="minimum_withdrawal" formatted="false">Minimum withdrawal: ৳500</string>
     <!--  Withdrawal Methods  -->
     <string name="withdrawal_method">Withdrawal Method</string>
     <string name="bkash">bKash</string>
@@ -53,5 +49,4 @@ I agree to the
     <string name="nav_tasks">Tasks</string>
     <string name="nav_wallet">Wallet</string>
     <string name="nav_profile">Profile</string>
-
 </resources>
