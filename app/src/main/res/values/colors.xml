@@ -102,10 +102,18 @@
     <!--  Other Colors  -->
     <color name="checkbox_border">#CBD5E1</color>
 <color name="red">#B61D12</color>
-    <color name="colorPending">#FFA000</color>    <!-- হলুদ/কমলা -->
-    <color name="colorApproved">#4CAF50</color>  <!-- সবুজ -->
+
     <color name="colorDeclined">#F44336</color>  <!-- লাল -->
     <color name="red_600">#E53935</color>
     <color name="grey_200">#EEEEEE</color>
+
+
+    <!-- Status Colors -->
+    <color name="colorPending">#FFA000</color>   <!-- Amber -->
+    <color name="colorApproved">#2E7D32</color>  <!-- Green -->
+    <color name="colorRejected">#D32F2F</color>  <!-- Red -->
+
+    <!-- Divider -->
+    <color name="divider">#E0E0E0</color>
 
 </resources>
