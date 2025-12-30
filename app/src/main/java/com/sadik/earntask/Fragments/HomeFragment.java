@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.sadik.earntask.R;
 
@@ -38,6 +39,17 @@ public class HomeFragment extends Fragment {
         // 🔹 Card
         MaterialCardView microTaskCard = view.findViewById(R.id.card_micro_task);
         MaterialCardView spin = view.findViewById(R.id.card_spin_win);
+        MaterialButton deposit = view.findViewById(R.id.btn_add_money);
+        deposit.setOnClickListener(v -> {
+            Fragment fragment = new DepositFragment();
+
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         microTaskCard.setOnClickListener(v -> {
             Fragment fragment = new MicroTaskFragment();
