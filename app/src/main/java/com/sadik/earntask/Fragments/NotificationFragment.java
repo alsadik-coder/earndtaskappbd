@@ -1,66 +1,74 @@
 package com.sadik.earntask.Fragments;
-
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.sadik.earntask.Adapter.NotificationAdapter;
+import com.sadik.earntask.Models.NotificationModel;
 import com.sadik.earntask.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotificationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rvNotifications;
+    private NotificationAdapter adapter;
+    private List<NotificationModel> notificationList;
+    private ImageView btnBack;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public NotificationFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NotificationFragment newInstance(String param1, String param2) {
-        NotificationFragment fragment = new NotificationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+
+        rvNotifications = view.findViewById(R.id.rvNotifications);
+        btnBack = view.findViewById(R.id.btnBack);
+
+        rvNotifications.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        notificationList = new ArrayList<>();
+
+        // 🔹 Demo data (later API / Firebase / DB theke asbe)
+        notificationList.add(new NotificationModel(
+                "Task Approved",
+                "Your submitted task has been approved successfully.",
+                "2h ago"
+        ));
+
+        notificationList.add(new NotificationModel(
+                "Reward Added",
+                "৳5 has been added to your wallet.",
+                "5h ago"
+        ));
+
+        notificationList.add(new NotificationModel(
+                "New Task Available",
+                "A new micro task is available for you.",
+                "1 day ago"
+        ));
+
+        adapter = new NotificationAdapter(notificationList);
+        rvNotifications.setAdapter(adapter);
+
+        // 🔙 Back button
+        btnBack.setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        return view;
     }
 }
