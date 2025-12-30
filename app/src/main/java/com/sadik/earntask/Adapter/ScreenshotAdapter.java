@@ -23,21 +23,30 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(
+            @NonNull ViewGroup parent,
+            int viewType
+    ) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_screenshot, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(
+            @NonNull ViewHolder holder,
+            int position
+    ) {
         Uri uri = list.get(position);
         holder.img.setImageURI(uri);
 
-        // Remove click
         holder.btnRemove.setOnClickListener(v -> {
-            list.remove(position);
-            notifyDataSetChanged();
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION) {
+                list.remove(pos);
+                notifyItemRemoved(pos);
+                notifyItemRangeChanged(pos, list.size()); // ✅ update positions
+            }
         });
     }
 
@@ -47,6 +56,7 @@ public class ScreenshotAdapter extends RecyclerView.Adapter<ScreenshotAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         ImageView img, btnRemove;
 
         ViewHolder(@NonNull View itemView) {

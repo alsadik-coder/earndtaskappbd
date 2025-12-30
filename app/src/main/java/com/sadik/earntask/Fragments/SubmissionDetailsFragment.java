@@ -1,66 +1,106 @@
 package com.sadik.earntask.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
+import com.sadik.earntask.Adapter.ScreenshotAdapter;
 import com.sadik.earntask.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SubmissionDetailsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubmissionDetailsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ImageView btnBack;
+    private MaterialButton btnApprove, btnDecline;
+    private TextView tvUserName, tvSubmittedText;
+    private RecyclerView rvScreenshots;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ScreenshotAdapter screenshotAdapter;
+    private List<Uri> screenshotList = new ArrayList<>();
 
-    public SubmissionDetailsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SubmissionDetailsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SubmissionDetailsFragment newInstance(String param1, String param2) {
-        SubmissionDetailsFragment fragment = new SubmissionDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+        View view = inflater.inflate(R.layout.fragment_submission_details, container, false);
+
+        initViews(view);
+        setupRecyclerView();
+        setupClickListeners();
+        loadDummyData(); // later replace with real data
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_submission_details, container, false);
+    private void initViews(View view) {
+        btnBack = view.findViewById(R.id.btnBack);
+        btnApprove = view.findViewById(R.id.btnApprove);
+        btnDecline = view.findViewById(R.id.btnDecline);
+        tvUserName = view.findViewById(R.id.tvUserName);
+        tvSubmittedText = view.findViewById(R.id.tvSubmittedText);
+        rvScreenshots = view.findViewById(R.id.rvScreenshots);
+    }
+
+    private void setupRecyclerView() {
+        rvScreenshots.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false)
+        );
+
+        screenshotAdapter = new ScreenshotAdapter(screenshotList);
+        rvScreenshots.setAdapter(screenshotAdapter);
+    }
+
+    private void setupClickListeners() {
+        // 🔙 Back button
+        btnBack.setOnClickListener(v -> {
+            if (getActivity() != null) getActivity().onBackPressed();
+        });
+
+        // ✅ Approve
+        btnApprove.setOnClickListener(v -> approveSubmission());
+
+        // ❌ Decline
+        btnDecline.setOnClickListener(v -> declineSubmission());
+    }
+
+    private void approveSubmission() {
+        // TODO: API / Firebase / Database approve logic
+        Toast.makeText(getContext(), "Submission Approved ✅", Toast.LENGTH_SHORT).show();
+        if (getActivity() != null) getActivity().onBackPressed();
+    }
+
+    private void declineSubmission() {
+        // TODO: API / Firebase / Database decline logic
+        Toast.makeText(getContext(), "Submission Declined ❌", Toast.LENGTH_SHORT).show();
+        if (getActivity() != null) getActivity().onBackPressed();
+    }
+
+    private void loadDummyData() {
+        tvUserName.setText("Abdullah");
+        tvSubmittedText.setText("This is user submitted task description.");
+
+        // Dummy screenshot URIs (replace with real images or paths)
+        screenshotList.add(Uri.parse("android.resource://com.sadik.earntask/drawable/img1"));
+        screenshotList.add(Uri.parse("android.resource://com.sadik.earntask/drawable/img2"));
+        screenshotList.add(Uri.parse("android.resource://com.sadik.earntask/drawable/img3"));
+
+        screenshotAdapter.notifyDataSetChanged();
     }
 }
