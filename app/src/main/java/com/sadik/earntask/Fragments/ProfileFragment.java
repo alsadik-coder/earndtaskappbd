@@ -20,7 +20,7 @@ public class ProfileFragment extends Fragment {
 
     private ImageView btnEditProfile;
     private TextView tvUserName, tvUserEmail;
-    private TextView btnMyTasks, btnPayments, btnNotifications, btnLogout;
+    private TextView btnMyTasks, btnPayments, btnNotifications, btnLogout, btnReffer;
 
     @Nullable
     @Override
@@ -36,6 +36,8 @@ public class ProfileFragment extends Fragment {
         tvUserEmail = view.findViewById(R.id.tvUserEmail);
 
         btnMyTasks = view.findViewById(R.id.btnMyTasks);
+        btnReffer = view.findViewById(R.id.btnReffer);
+
         btnPayments = view.findViewById(R.id.btnPayments);
         btnNotifications = view.findViewById(R.id.btnNotifications);
         btnLogout = view.findViewById(R.id.btnLogout);
@@ -47,6 +49,10 @@ public class ProfileFragment extends Fragment {
         // 🔹 Edit profile
         btnEditProfile.setOnClickListener(v ->
                 openFragment(new EditProfileFragment())
+        );
+
+        btnReffer.setOnClickListener(v ->
+                openFragment(new ReferFragment())
         );
 
         // 🔹 My Tasks

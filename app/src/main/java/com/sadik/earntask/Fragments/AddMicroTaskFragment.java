@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -20,7 +21,7 @@ public class AddMicroTaskFragment extends Fragment {
 
     private EditText etTaskName, etReward, etDescription, etUrl;
     private ImageView btnClose;
-    private MaterialButton btnAddTask;
+    private AppCompatButton btnAddTask;
 
     private OnTaskAddedListener listener;
 
@@ -118,7 +119,9 @@ public class AddMicroTaskFragment extends Fragment {
     // ------------------------------
     // Callback interface
     // ------------------------------
+
     public interface OnTaskAddedListener {
         void onTaskAdded(MicroTask task);
     }
+
 }

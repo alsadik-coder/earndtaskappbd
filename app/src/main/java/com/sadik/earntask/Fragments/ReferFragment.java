@@ -1,316 +1,132 @@
 package com.sadik.earntask.Fragments;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.material.snackbar.Snackbar;
-import com.sadik.earntask.R;
+import com.sadik.earntask.*;
+import org.json.JSONObject;
+import okhttp3.ResponseBody;
+import retrofit2.*;
 
 public class ReferFragment extends Fragment {
 
-    // UI Components
-    private ImageView btnBack, btnCopyCode, btnCopyLink;
-    private TextView tvReferralCode, tvReferralLink, tvReferrals, tvEarnings;
-    private EditText etSubmitReferralCode;
-    private CardView cvSubmitReferralCard;
+    ImageView btnBack,btnCopyCode,btnCopyLink;
+    TextView tvReferralCode,tvReferralLink,tvReferrals,tvEarnings;
+    EditText etSubmit;
+    CardView cvSubmit;
 
-    // SharedPreferences for storing data
-    private SharedPreferences sharedPreferences;
-    private static final String PREF_NAME = "ReferralPrefs";
-    private static final String KEY_REFERRAL_USED = "referral_used";
-    private static final String KEY_DEVICE_ID = "device_id";
-    private static final String KEY_USER_EARNINGS = "user_earnings";
-    private static final String KEY_REFERRAL_COUNT = "referral_count";
-
-    // Referral reward amount
-    private static final int REFERRAL_REWARD = 5; // 5 Taka
+    ApiInterface api;
+    PrefManager pref;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_refer, container, false);
+    public View onCreateView(@NonNull LayoutInflater inf,@Nullable ViewGroup c,@Nullable Bundle b) {
+        View v=inf.inflate(R.layout.fragment_refer,c,false);
 
-        // Initialize SharedPreferences
-        sharedPreferences = requireActivity().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        btnBack=v.findViewById(R.id.btnBack);
+        btnCopyCode=v.findViewById(R.id.btnCopyCode);
+        btnCopyLink=v.findViewById(R.id.btnCopyLink);
+        tvReferralCode=v.findViewById(R.id.tvReferralCode);
+        tvReferralLink=v.findViewById(R.id.tvReferralLink);
+        tvReferrals=v.findViewById(R.id.tvReferrals);
+        tvEarnings=v.findViewById(R.id.tvEarnings);
+        etSubmit=v.findViewById(R.id.etSubmitReferralCode);
+        cvSubmit=v.findViewById(R.id.cvSubmitReferralCard);
 
-        // Initialize UI components
-        initViews(view);
+        pref=new PrefManager(getContext());
+        api=ApiClient.getClient().create(ApiInterface.class);
 
-        // Set up click listeners
-        setupClickListeners();
+        tvReferralCode.setText(pref.getMyCode());
+        tvReferralLink.setText("https://earntaka.com/referral/"+pref.getMyCode());
 
-        // Load user data
-        loadUserData();
+        btnCopyCode.setOnClickListener(vw->copy(tvReferralCode.getText().toString()));
+        btnCopyLink.setOnClickListener(vw->copy(tvReferralLink.getText().toString()));
+        btnBack.setOnClickListener(vw->requireActivity().onBackPressed());
 
-        // Check if referral card should be hidden
-        checkReferralCardVisibility();
+        v.findViewById(R.id.btnSubmitReferral).setOnClickListener(vw->submit());
 
-        return view;
+        setupShare(v);
+        return v;
     }
 
-    private void initViews(View view) {
-        btnBack = view.findViewById(R.id.btnBack);
-        btnCopyCode = view.findViewById(R.id.btnCopyCode);
-        btnCopyLink = view.findViewById(R.id.btnCopyLink);
-        tvReferralCode = view.findViewById(R.id.tvReferralCode);
-        tvReferralLink = view.findViewById(R.id.tvReferralLink);
-        tvReferrals = view.findViewById(R.id.tvReferrals);
-        tvEarnings = view.findViewById(R.id.tvEarnings);
-        etSubmitReferralCode = view.findViewById(R.id.etSubmitReferralCode);
-        cvSubmitReferralCard = view.findViewById(R.id.cvSubmitReferralCard);
+    private void submit(){
+        String code=etSubmit.getText().toString().trim();
+        if(code.isEmpty()){toast("Enter referral code");return;}
 
-        // Set up submit button
-        View btnSubmitReferral = view.findViewById(R.id.btnSubmitReferral);
-        btnSubmitReferral.setOnClickListener(v -> submitReferralCode());
+        api.claimReferral(pref.getUserId(),code,getDeviceHash())
+                .enqueue(new Callback<ResponseBody>() {
+                    public void onResponse(Call<ResponseBody> c, Response<ResponseBody> r) {
+                        try{
+                            String raw=r.body().string();
+                            JSONObject o=new JSONObject(raw);
 
-        // Set up share options (you would need to implement these methods)
-        view.findViewById(R.id.shareWhatsApp).setOnClickListener(v -> shareViaWhatsApp());
-        view.findViewById(R.id.shareMessenger).setOnClickListener(v -> shareViaMessenger());
-        view.findViewById(R.id.shareTelegram).setOnClickListener(v -> shareViaTelegram());
-        view.findViewById(R.id.shareEmail).setOnClickListener(v -> shareViaEmail());
-        view.findViewById(R.id.shareSMS).setOnClickListener(v -> shareViaSMS());
-
-        // Set up CTA button
-
+                            if(o.getString("status").equals("success")){
+                                cvSubmit.setVisibility(View.GONE);
+                                Snackbar.make(getView(),
+                                        "You got ৳"+o.getInt("you_got")+" & your friend got ৳"+o.getInt("referrer_got"),
+                                        Snackbar.LENGTH_LONG).show();
+                                etSubmit.setText("");
+                            }
+                            else{
+                                showError(o.getString("msg"));
+                            }
+                        }catch(Exception e){
+                            showError("Invalid Server Response");
+                        }
+                    }
+                    public void onFailure(Call<ResponseBody> c, Throwable t){toast("Network error");}
+                });
     }
 
-    private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                getActivity().onBackPressed();
-            }
-        });
-
-        // Copy referral code
-        btnCopyCode.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Referral Code", tvReferralCode.getText().toString());
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(getContext(), "রেফারেল কোড কপি করা হয়েছে", Toast.LENGTH_SHORT).show();
-        });
-
-        // Copy referral link
-        btnCopyLink.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Referral Link", tvReferralLink.getText().toString());
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(getContext(), "রেফারেল লিঙ্ক কপি করা হয়েছে", Toast.LENGTH_SHORT).show();
-        });
+    private String getDeviceHash(){
+        return Settings.Secure.getString(requireContext().getContentResolver(),Settings.Secure.ANDROID_ID);
     }
 
-    private void loadUserData() {
-        // Load user earnings
-        int earnings = sharedPreferences.getInt(KEY_USER_EARNINGS, 0);
-        tvEarnings.setText("৳" + earnings);
-
-        // Load referral count
-        int referralCount = sharedPreferences.getInt(KEY_REFERRAL_COUNT, 0);
-        tvReferrals.setText(String.valueOf(referralCount));
-
-        // Generate or load user's referral code
-        String referralCode = sharedPreferences.getString("user_referral_code", "");
-        if (TextUtils.isEmpty(referralCode)) {
-            // Generate a new referral code (you might want to use a more sophisticated method)
-            referralCode = generateReferralCode();
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("user_referral_code", referralCode);
-            editor.apply();
-        }
-        tvReferralCode.setText(referralCode);
-
-        // Generate referral link
-        String referralLink = "https://earntaka.com/referral/" + referralCode;
-        tvReferralLink.setText(referralLink);
+    private void copy(String txt){
+        ClipboardManager cm=(ClipboardManager)requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setPrimaryClip(ClipData.newPlainText("copy",txt));
+        toast("Copied");
     }
 
-    private void checkReferralCardVisibility() {
-        // Check if user has already used a referral code
-        boolean referralUsed = sharedPreferences.getBoolean(KEY_REFERRAL_USED, false);
+    private void toast(String m){Toast.makeText(getContext(),m,Toast.LENGTH_SHORT).show();}
 
-        if (referralUsed) {
-            // Hide the submit referral card
-            cvSubmitReferralCard.setVisibility(View.GONE);
-        } else {
-            // Show the submit referral card
-            cvSubmitReferralCard.setVisibility(View.VISIBLE);
-        }
+    private void setupShare(View v){
+        String shareTxt="Earn with my referral code "+tvReferralCode.getText()+"\n"+tvReferralLink.getText();
+        v.findViewById(R.id.shareWhatsApp).setOnClickListener(b->share("com.whatsapp",shareTxt));
+        v.findViewById(R.id.shareMessenger).setOnClickListener(b->share("com.facebook.orca",shareTxt));
+        v.findViewById(R.id.shareTelegram).setOnClickListener(b->share("org.telegram.messenger",shareTxt));
+        v.findViewById(R.id.shareEmail).setOnClickListener(b->startActivity(new Intent(Intent.ACTION_SENDTO,Uri.parse("mailto:"))));
+        v.findViewById(R.id.shareSMS).setOnClickListener(b->startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("sms:"))));
     }
 
-    private void submitReferralCode() {
-        String enteredCode = etSubmitReferralCode.getText().toString().trim();
-
-        // Check if the entered code is empty
-        if (TextUtils.isEmpty(enteredCode)) {
-            Toast.makeText(getContext(), "অনুগ্রহ করে একটি রেফারেল কোড লিখুন", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Check if user has already used a referral code
-        boolean referralUsed = sharedPreferences.getBoolean(KEY_REFERRAL_USED, false);
-        if (referralUsed) {
-            Toast.makeText(getContext(), "আপনি ইতিমধ্যে একটি রেফারেল কোড ব্যবহার করেছেন", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Get device ID
-        String deviceId = Settings.Secure.getString(getContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-        // Check if this device has already used a referral code
-        String savedDeviceId = sharedPreferences.getString(KEY_DEVICE_ID, "");
-        if (!TextUtils.isEmpty(savedDeviceId) && savedDeviceId.equals(deviceId)) {
-            Toast.makeText(getContext(), "এই ডিভাইস থেকে ইতিমধ্যে একটি রেফারেল কোড ব্যবহার করা হয়েছে", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Validate the referral code (this would typically involve a server call)
-        if (validateReferralCode(enteredCode)) {
-            // Code is valid, process the reward
-            processReferralReward(enteredCode, deviceId);
-        } else {
-            Toast.makeText(getContext(), "অবৈধ রেফারেল কোড", Toast.LENGTH_SHORT).show();
-        }
+    private void share(String pkg,String txt){
+        Intent i=new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_TEXT,txt);
+        i.setPackage(pkg);
+        try{startActivity(i);}catch(Exception e){toast("App not installed");}
     }
 
-    private boolean validateReferralCode(String code) {
-        // In a real app, you would validate this against a server
-        // For demo purposes, we'll consider any 6-8 character code as valid
-        return code.length() >= 6 && code.length() <= 8;
+    private void showError(String msg){
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Referral Failed")
+                .setMessage(msg)
+                .setPositiveButton("COPY",(d,i)->{
+                    ClipboardManager cm=(ClipboardManager)requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    cm.setPrimaryClip(ClipData.newPlainText("error",msg));
+                    Toast.makeText(getContext(),"Copied",Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("OK",null)
+                .show();
     }
 
-    private void processReferralReward(String referralCode, String deviceId) {
-        // Update user's earnings
-        int currentEarnings = sharedPreferences.getInt(KEY_USER_EARNINGS, 0);
-        int newEarnings = currentEarnings + REFERRAL_REWARD;
-
-        // Update referral count
-        int referralCount = sharedPreferences.getInt(KEY_REFERRAL_COUNT, 0);
-        int newReferralCount = referralCount + 1;
-
-        // Save updated data
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_USER_EARNINGS, newEarnings);
-        editor.putInt(KEY_REFERRAL_COUNT, newReferralCount);
-        editor.putBoolean(KEY_REFERRAL_USED, true);
-        editor.putString(KEY_DEVICE_ID, deviceId);
-        editor.putString("used_referral_code", referralCode);
-        editor.apply();
-
-        // Update UI
-        tvEarnings.setText("৳" + newEarnings);
-        tvReferrals.setText(String.valueOf(newReferralCount));
-
-        // Hide the submit referral card
-        cvSubmitReferralCard.setVisibility(View.GONE);
-
-        // Show success message
-        Snackbar.make(getView(), "অভিনন্দন! আপনি " + REFERRAL_REWARD + " টাকা পেয়েছেন", Snackbar.LENGTH_LONG).show();
-
-        // Clear the input field
-        etSubmitReferralCode.setText("");
-    }
-
-    private String generateReferralCode() {
-        // Simple referral code generation - in a real app, you'd want a more robust method
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder code = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            int index = (int) (Math.random() * chars.length());
-            code.append(chars.charAt(index));
-        }
-        return code.toString();
-    }
-
-    // Share methods (implement as needed)
-    private void shareViaWhatsApp() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        shareIntent.setPackage("com.whatsapp");
-        try {
-            startActivity(shareIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "WhatsApp ইনস্টল করা নেই", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void shareViaMessenger() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        shareIntent.setPackage("com.facebook.orca");
-        try {
-            startActivity(shareIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "Messenger ইনস্টল করা নেই", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void shareViaTelegram() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        shareIntent.setPackage("org.telegram.messenger");
-        try {
-            startActivity(shareIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "Telegram ইনস্টল করা নেই", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void shareViaEmail() {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "আয় করার জন্য রেফারেল কোড");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        try {
-            startActivity(emailIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "কোনো ইমেল অ্যাপ্লিকেশন পাওয়া যায়নি", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void shareViaSMS() {
-        Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-        smsIntent.setData(Uri.parse("sms:"));
-        smsIntent.putExtra("sms_body", "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        try {
-            startActivity(smsIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "SMS অ্যাপ্লিকেশন পাওয়া যায়নি", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void shareReferralLink() {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT, "আমার রেফারেল কোড ব্যবহার করে আয় করুন: " + tvReferralCode.getText().toString() +
-                "\nলিঙ্ক: " + tvReferralLink.getText().toString());
-        startActivity(Intent.createChooser(shareIntent, "শেয়ার করুন"));
-    }
 }

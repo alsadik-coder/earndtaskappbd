@@ -26,4 +26,13 @@ public interface ApiInterface {
     );
 
 
+    @FormUrlEncoded
+    @POST("claim_referral.php")
+    Call<ResponseBody> claimReferral(
+            @Field("user_id") String uid,
+            @Field("code") String code,
+            @Field("device_hash") String device
+    );
+
+
 }

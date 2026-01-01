@@ -67,6 +67,13 @@ public class LoginActivity extends AppCompatActivity {
 
                         if(obj.getString("status").equals("success")){
                             pref.saveToken(obj.getString("token"));
+                            pref.saveUser(
+                                    obj.getString("uid"),
+                                    obj.getString("name"),
+                                    obj.getString("email"),
+                                    obj.getString("code")
+                            );
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         }else{
