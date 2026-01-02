@@ -14,7 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.sadik.earntask.ApiClient;
+import com.sadik.earntask.ApiInterface;
+import com.sadik.earntask.PrefManager;
 import com.sadik.earntask.R;
+
+import org.json.JSONObject;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DepositFragment extends Fragment {
     // View references
@@ -31,6 +42,8 @@ public class DepositFragment extends Fragment {
 
     // TODO: Replace with actual data from MySQL when team member implements it
     private double currentBalance = 1250.0;
+
+    ApiInterface api; PrefManager pref;
 
     @Nullable
     @Override
@@ -49,6 +62,11 @@ public class DepositFragment extends Fragment {
 
         setupClickListeners();
         loadUserData();
+
+        api= ApiClient.getClient().create(ApiInterface.class);
+        pref=new PrefManager(requireContext());
+        loadBalance();
+        setupClickListeners();
     }
 
     private void initViews(View view) {
@@ -156,20 +174,6 @@ public class DepositFragment extends Fragment {
         return true;
     }
 
-    private void processDeposit() {
-        String amount = etAmount.getText().toString().trim();
-        String fromNumber = etFromNumber.getText().toString().trim();
-        String method = etMethod.getText().toString().trim();
-        String transactionId = etTransactionId.getText().toString().trim();
-
-        // Show processing state
-        btnDeposit.setEnabled(false);
-        btnDeposit.setText("Processing...");
-
-        // TODO: Team member will implement MySQL operations here
-        // For now, simulating the process
-        simulateDepositProcess(Double.parseDouble(amount), fromNumber, method, transactionId);
-    }
 
     private void simulateDepositProcess(double amount, String fromNumber, String method, String transactionId) {
         // Simulate network delay
@@ -213,4 +217,45 @@ public class DepositFragment extends Fragment {
         // For now, this is a placeholder
         // Team member can update this section when they implement MySQL operations
     }
+
+
+    void loadBalance(){
+        api.getBalance(pref.getUserId()).enqueue(new Callback<ResponseBody>() {
+            public void onResponse(Call<ResponseBody> c, Response<ResponseBody> r){
+                try{
+                    JSONObject o=new JSONObject(r.body().string());
+                    tvBalance.setText("৳ "+o.getString("balance"));
+                }catch(Exception e){}
+            }
+            public void onFailure(Call<ResponseBody> c,Throwable t){}
+        });
+    }
+
+    void processDeposit(){
+        String amount=etAmount.getText().toString().trim();
+        String from=etFromNumber.getText().toString().trim();
+        String method=etMethod.getText().toString().trim();
+        String trx=etTransactionId.getText().toString().trim();
+
+        btnDeposit.setEnabled(false);
+        btnDeposit.setText("Processing...");
+
+        api.deposit(pref.getUserId(),amount,from,method,trx).enqueue(new Callback<ResponseBody>() {
+            public void onResponse(Call<ResponseBody> c,Response<ResponseBody> r){
+                try{
+                    JSONObject o=new JSONObject(r.body().string());
+                    Toast.makeText(getContext(),o.getString("status").equals("success")?"Request Sent":o.getString("msg"),Toast.LENGTH_LONG).show();
+                }catch(Exception e){}
+                btnDeposit.setEnabled(true);
+                btnDeposit.setText("Proceed to Deposit");
+                resetForm();
+            }
+            public void onFailure(Call<ResponseBody> c, Throwable t){
+                Toast.makeText(getContext(),"Network Error",Toast.LENGTH_LONG).show();
+                btnDeposit.setEnabled(true);
+                btnDeposit.setText("Proceed to Deposit");
+            }
+        });
+    }
+
 }

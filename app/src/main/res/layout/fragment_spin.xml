@@ -405,7 +405,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+
+
+            
             <!-- Rules -->
+
+
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

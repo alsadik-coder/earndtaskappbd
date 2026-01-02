@@ -2,126 +2,64 @@ package com.sadik.earntask.Fragments;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
+import android.view.*;
+import android.widget.*;
+import androidx.annotation.*;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.button.MaterialButton;
-import com.sadik.earntask.R;
+import com.sadik.earntask.*;
+import okhttp3.ResponseBody;
+import org.json.JSONObject;
+import retrofit2.*;
 
 public class AddMicroTaskFragment extends Fragment {
 
-    private EditText etTaskName, etReward, etDescription, etUrl;
-    private ImageView btnClose;
-    private AppCompatButton btnAddTask;
-
-    private OnTaskAddedListener listener;
-
-    public AddMicroTaskFragment() {
-        // Required empty constructor
-    }
-
-    // Optional: set listener from parent fragment/activity
-    public void setOnTaskAddedListener(OnTaskAddedListener listener) {
-        this.listener = listener;
-    }
+    EditText etName,etReward,etDesc,etUrl;
+    ImageView btnClose;
+    Button btnAdd;
+    ApiInterface api;
 
     @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_micro_task, container, false);
+    public View onCreateView(@NonNull LayoutInflater i,@Nullable ViewGroup c,@Nullable Bundle b){
+        return i.inflate(R.layout.fragment_add_micro_task,c,false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View v,@Nullable Bundle b){
+        etName=v.findViewById(R.id.etTaskName);
+        etReward=v.findViewById(R.id.etReward);
+        etDesc=v.findViewById(R.id.etDescription);
+        etUrl=v.findViewById(R.id.etUrl);
+        btnClose=v.findViewById(R.id.btnClose);
+        btnAdd=v.findViewById(R.id.btnAddTask);
 
-        // init views
-        etTaskName = view.findViewById(R.id.etTaskName);
-        etReward = view.findViewById(R.id.etReward);
-        etDescription = view.findViewById(R.id.etDescription);
-        etUrl = view.findViewById(R.id.etUrl);
+        api=ApiClient.getClient().create(ApiInterface.class);
 
-        btnClose = view.findViewById(R.id.btnClose);
-        btnAddTask = view.findViewById(R.id.btnAddTask);
-
-        // close dialog / fragment
-        btnClose.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
-
-        // add task
-        btnAddTask.setOnClickListener(v -> addTask());
+        btnClose.setOnClickListener(bk->requireActivity().onBackPressed());
+        btnAdd.setOnClickListener(vw->submit());
     }
 
-    private void addTask() {
-        String name = etTaskName.getText().toString().trim();
-        String rewardStr = etReward.getText().toString().trim();
-        String desc = etDescription.getText().toString().trim();
-        String url = etUrl.getText().toString().trim();
+    void submit(){
+        String name=etName.getText().toString().trim();
+        String reward=etReward.getText().toString().trim();
+        String desc=etDesc.getText().toString().trim();
+        String url=etUrl.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name)) {
-            etTaskName.setError("Task name required");
-            return;
-        }
-        if (TextUtils.isEmpty(rewardStr)) {
-            etReward.setError("Reward required");
-            return;
+        if(name.isEmpty()||reward.isEmpty()){
+            toast("Fill required fields"); return;
         }
 
-        int reward = 0;
-        try {
-            reward = Integer.parseInt(rewardStr);
-        } catch (NumberFormatException e) {
-            etReward.setError("Invalid number");
-            return;
-        }
-
-        // Optionally create a model object
-        MicroTask newTask = new MicroTask(name, reward, desc, url);
-
-        // send back to listener
-        if (listener != null) {
-            listener.onTaskAdded(newTask);
-        }
-
-        Toast.makeText(requireContext(), "Task Added", Toast.LENGTH_SHORT).show();
-
-        // close fragment
-        requireActivity().getSupportFragmentManager().popBackStack();
+        api.addMicroTask(name,desc,reward,url).enqueue(new Callback<ResponseBody>() {
+            public void onResponse(Call<ResponseBody> c,Response<ResponseBody> r){
+                try{
+                    JSONObject o=new JSONObject(r.body().string());
+                    if(o.getString("status").equals("success")){
+                        toast("Task added successfully");
+                        requireActivity().onBackPressed();
+                    }else toast(o.getString("msg"));
+                }catch(Exception e){toast("Server error");}
+            }
+            public void onFailure(Call<ResponseBody> c,Throwable t){toast("Network error");}
+        });
     }
 
-    // ------------------------------
-    // MicroTask model
-    // ------------------------------
-    public static class MicroTask {
-        public String taskName;
-        public int reward;
-        public String description;
-        public String url;
-
-        public MicroTask(String taskName, int reward, String description, String url) {
-            this.taskName = taskName;
-            this.reward = reward;
-            this.description = description;
-            this.url = url;
-        }
-    }
-
-    // ------------------------------
-    // Callback interface
-    // ------------------------------
-
-    public interface OnTaskAddedListener {
-        void onTaskAdded(MicroTask task);
-    }
-
+    void toast(String m){Toast.makeText(getContext(),m,Toast.LENGTH_SHORT).show();}
 }
